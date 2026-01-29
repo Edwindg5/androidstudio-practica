@@ -1,4 +1,5 @@
-package com.edwindiaz.myapplication.incrementador.presentation.screens
+//IncrementadorScren.kt
+package com.edwindiaz.myapplication.features.incrementador.presentation.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

@@ -1,0 +1,9 @@
+// features/jsonplaceholder/domain/entities/Post.kt
+package com.edwindiaz.myapplication.features.jsonplaceholder.domain.entities
+
+data class Post(
+    val id: Int,
+    val userId: Int,
+    val title: String,
+    val body: String
+)
