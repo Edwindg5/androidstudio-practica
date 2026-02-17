@@ -21,18 +21,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
+
 import com.edwindiaz.myapplication.features.jsonplaceholder.presentation.components.PostCard
 import com.edwindiaz.myapplication.features.jsonplaceholder.presentation.viewmodels.PostsViewModel
-import com.edwindiaz.myapplication.features.jsonplaceholder.presentation.viewmodels.PostsViewModelFactory
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostsScreen(
-    factory: PostsViewModelFactory
+    viewModel: PostsViewModel = hiltViewModel()
 ) {
-    val viewModel: PostsViewModel = viewModel(factory = factory)
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
@@ -55,7 +55,7 @@ fun PostsScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = uiState.error ?: "Error",
+                            text = uiState.error ?: "Error desconocido",
                             color = Color.Red,
                             modifier = Modifier.padding(16.dp)
                         )

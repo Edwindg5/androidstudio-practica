@@ -2,16 +2,14 @@
 package com.edwindiaz.myapplication.features.jsonplaceholder.domain.usecases
 
 import com.edwindiaz.myapplication.features.jsonplaceholder.domain.repositories.PostRepository
+import javax.inject.Inject
 
-class DeletePostUseCase(
+class DeletePostUseCase @Inject constructor(
     private val repository: PostRepository
 ) {
-    suspend operator fun invoke(id: Int): Result<Unit> {
-        return try {
-            repository.deletePost(id)
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+    suspend operator fun invoke(id: Int): Result<Unit> = try {
+        Result.success(repository.deletePost(id))
+    } catch (e: Exception) {
+        Result.failure(e)
     }
 }

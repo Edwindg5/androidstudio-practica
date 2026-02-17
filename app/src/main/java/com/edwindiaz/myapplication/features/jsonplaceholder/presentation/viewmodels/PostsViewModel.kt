@@ -12,8 +12,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class PostsViewModel(
+@HiltViewModel
+class PostsViewModel @Inject constructor(
     private val getPostsUseCase: GetPostsUseCase,
     private val updatePostUseCase: UpdatePostUseCase,
     private val deletePostUseCase: DeletePostUseCase
@@ -28,17 +31,12 @@ class PostsViewModel(
 
     fun loadPosts() {
         _uiState.update { it.copy(isLoading = true, error = null) }
-
         viewModelScope.launch {
             val result = getPostsUseCase()
-            _uiState.update { currentState ->
+            _uiState.update { current ->
                 result.fold(
-                    onSuccess = { posts ->
-                        currentState.copy(isLoading = false, posts = posts)
-                    },
-                    onFailure = { error ->
-                        currentState.copy(isLoading = false, error = error.message)
-                    }
+                    onSuccess = { posts -> current.copy(isLoading = false, posts = posts) },
+                    onFailure = { error -> current.copy(isLoading = false, error = error.message) }
                 )
             }
         }
@@ -46,24 +44,18 @@ class PostsViewModel(
 
     fun updatePost(post: Post) {
         _uiState.update { it.copy(isUpdating = true, error = null) }
-
         viewModelScope.launch {
             val result = updatePostUseCase(post)
-            _uiState.update { currentState ->
+            _uiState.update { current ->
                 result.fold(
-                    onSuccess = { updatedPost ->
-                        val updatedList = currentState.posts.map {
-                            if (it.id == updatedPost.id) updatedPost else it
-                        }
-                        currentState.copy(
+                    onSuccess = { updated ->
+                        current.copy(
                             isUpdating = false,
-                            posts = updatedList,
-                            selectedPost = updatedPost
+                            posts = current.posts.map { if (it.id == updated.id) updated else it },
+                            selectedPost = updated
                         )
                     },
-                    onFailure = { error ->
-                        currentState.copy(isUpdating = false, error = error.message)
-                    }
+                    onFailure = { error -> current.copy(isUpdating = false, error = error.message) }
                 )
             }
         }
@@ -71,22 +63,18 @@ class PostsViewModel(
 
     fun deletePost(id: Int) {
         _uiState.update { it.copy(isDeleting = true, error = null) }
-
         viewModelScope.launch {
             val result = deletePostUseCase(id)
-            _uiState.update { currentState ->
+            _uiState.update { current ->
                 result.fold(
                     onSuccess = {
-                        val updatedList = currentState.posts.filter { it.id != id }
-                        currentState.copy(
+                        current.copy(
                             isDeleting = false,
-                            posts = updatedList,
+                            posts = current.posts.filter { it.id != id },
                             selectedPost = null
                         )
                     },
-                    onFailure = { error ->
-                        currentState.copy(isDeleting = false, error = error.message)
-                    }
+                    onFailure = { error -> current.copy(isDeleting = false, error = error.message) }
                 )
             }
         }

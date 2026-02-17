@@ -31,24 +31,18 @@ fun PostCard(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(12.dp)
-        ) {
+        Column(modifier = Modifier.padding(12.dp)) {
             Text(
                 text = post.title,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
-
             Text(
                 text = post.body,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(top = 4.dp)
             )
-
-            Row(
-                modifier = Modifier.padding(top = 8.dp)
-            ) {
+            Row(modifier = Modifier.padding(top = 8.dp)) {
                 Text(
                     text = "User ID: ${post.userId}",
                     style = MaterialTheme.typography.labelSmall

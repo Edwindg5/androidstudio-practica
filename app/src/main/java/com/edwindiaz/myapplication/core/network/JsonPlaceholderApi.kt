@@ -1,14 +1,16 @@
 // core/network/JsonPlaceholderApi.kt
 package com.edwindiaz.myapplication.core.network
 
+
 import com.edwindiaz.myapplication.features.jsonplaceholder.data.datasources.remote.model.PostDto
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
-import retrofit2.http.Body
 
 interface JsonPlaceholderApi {
+
     @GET("posts")
     suspend fun getPosts(): List<PostDto>
 
